@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       0047942a-70b6-4ad9-bb2f-886548d15c87
+:END:
+#+TITLE: Arduino Cli
+#+SETUPFILE: tags.org
+
+* Commands

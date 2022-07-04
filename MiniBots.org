@@ -1,0 +1,316 @@
+:PROPERTIES:
+:ID:       f589e002-12fe-4765-8f8d-d4d7e9200b5e
+:END:
+#+TITLE: Mini-Bots
+#+SETUPFILE: tags.org
+
+
+#+NAME: Project Spec
+                     +-----------+
+                     |  Enterprice  |
++--------------+-----------+
+| [[id:c445b388-0f7f-4b99-82b7-4743973aba07][Microcontroller]] | [[id:f385e9e7-b195-4a9d-9ec3-392cd74a63bc][ATmega328P]] |
++--------------+-----------+
+
+* Setup
+** Connection
+To find the connection we first see what we have connected before connecting the [[id:c445b388-0f7f-4b99-82b7-4743973aba07][Microcontroller]] by listing ~/dev/tty*~.
+
+#+Name: Before Connecting Devices
+#+begin_src shell :result drawer
+ls -lash /dev/tty* | tee /tmp/unpluged.txt
+#+end_src
+
+#+RESULTS: Before Connecting Devices
+| 0 crw-rw-rw- 1 root           wheel  2 | 0 Apr  2 17:34 /dev/tty                         |
+| 0 crw-rw-rw- 1 root           wheel  9 | 2 Mar 29 22:39 /dev/tty.Bluetooth-Incoming-Port |
+| 0 crw-rw-rw- 1 root           wheel  9 | 0 Mar 29 22:39 /dev/tty.wlan-debug              |
+| 0 crw-rw-rw- 1 root           wheel  4 | 0 Mar 29 22:39 /dev/ttyp0                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 1 Mar 29 22:39 /dev/ttyp1                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 2 Mar 29 22:39 /dev/ttyp2                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 3 Mar 29 22:39 /dev/ttyp3                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 4 Mar 29 22:39 /dev/ttyp4                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 5 Mar 29 22:39 /dev/ttyp5                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 6 Mar 29 22:39 /dev/ttyp6                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 7 Mar 29 22:39 /dev/ttyp7                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 8 Mar 29 22:39 /dev/ttyp8                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 9 Mar 29 22:39 /dev/ttyp9                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 10 Mar 29 22:39 /dev/ttypa                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 11 Mar 29 22:39 /dev/ttypb                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 12 Mar 29 22:39 /dev/ttypc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 13 Mar 29 22:39 /dev/ttypd                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 14 Mar 29 22:39 /dev/ttype                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 15 Mar 29 22:39 /dev/ttypf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 16 Mar 29 22:39 /dev/ttyq0                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 17 Mar 29 22:39 /dev/ttyq1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 18 Mar 29 22:39 /dev/ttyq2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 19 Mar 29 22:39 /dev/ttyq3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 20 Mar 29 22:39 /dev/ttyq4                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 21 Mar 29 22:39 /dev/ttyq5                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 22 Mar 29 22:39 /dev/ttyq6                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 23 Mar 29 22:39 /dev/ttyq7                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 24 Mar 29 22:39 /dev/ttyq8                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 25 Mar 29 22:39 /dev/ttyq9                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 26 Mar 29 22:39 /dev/ttyqa                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 27 Mar 29 22:39 /dev/ttyqb                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 28 Mar 29 22:39 /dev/ttyqc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 29 Mar 29 22:39 /dev/ttyqd                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 30 Mar 29 22:39 /dev/ttyqe                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 31 Mar 29 22:39 /dev/ttyqf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 32 Mar 29 22:39 /dev/ttyr0                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 33 Mar 29 22:39 /dev/ttyr1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 34 Mar 29 22:39 /dev/ttyr2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 35 Mar 29 22:39 /dev/ttyr3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 36 Mar 29 22:39 /dev/ttyr4                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 37 Mar 29 22:39 /dev/ttyr5                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 38 Mar 29 22:39 /dev/ttyr6                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 39 Mar 29 22:39 /dev/ttyr7                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 40 Mar 29 22:39 /dev/ttyr8                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 41 Mar 29 22:39 /dev/ttyr9                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 42 Mar 29 22:39 /dev/ttyra                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 43 Mar 29 22:39 /dev/ttyrb                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 44 Mar 29 22:39 /dev/ttyrc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 45 Mar 29 22:39 /dev/ttyrd                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 46 Mar 29 22:39 /dev/ttyre                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 47 Mar 29 22:39 /dev/ttyrf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 48 Mar 29 22:39 /dev/ttys0                      |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 0 Apr  2 17:44 /dev/ttys000                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 1 Apr  2 17:37 /dev/ttys001                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 2 Apr  2 18:49 /dev/ttys002                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 3 Mar 29 23:04 /dev/ttys003                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 4 Mar 29 23:30 /dev/ttys004                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 5 Apr  2 17:36 /dev/ttys005                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 6 Apr  2 17:40 /dev/ttys006                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 7 Apr  2 18:23 /dev/ttys007                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 49 Mar 29 22:39 /dev/ttys1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 50 Mar 29 22:39 /dev/ttys2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 51 Mar 29 22:39 /dev/ttys3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 52 Mar 29 22:39 /dev/ttys4                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 53 Mar 29 22:39 /dev/ttys5                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 54 Mar 29 22:39 /dev/ttys6                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 55 Mar 29 22:39 /dev/ttys7                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 56 Mar 29 22:39 /dev/ttys8                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 57 Mar 29 22:39 /dev/ttys9                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 58 Mar 29 22:39 /dev/ttysa                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 59 Mar 29 22:39 /dev/ttysb                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 60 Mar 29 22:39 /dev/ttysc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 61 Mar 29 22:39 /dev/ttysd                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 62 Mar 29 22:39 /dev/ttyse                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 63 Mar 29 22:39 /dev/ttysf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 64 Mar 29 22:39 /dev/ttyt0                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 65 Mar 29 22:39 /dev/ttyt1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 66 Mar 29 22:39 /dev/ttyt2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 67 Mar 29 22:39 /dev/ttyt3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 68 Mar 29 22:39 /dev/ttyt4                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 69 Mar 29 22:39 /dev/ttyt5                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 70 Mar 29 22:39 /dev/ttyt6                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 71 Mar 29 22:39 /dev/ttyt7                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 72 Mar 29 22:39 /dev/ttyt8                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 73 Mar 29 22:39 /dev/ttyt9                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 74 Mar 29 22:39 /dev/ttyta                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 75 Mar 29 22:39 /dev/ttytb                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 76 Mar 29 22:39 /dev/ttytc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 77 Mar 29 22:39 /dev/ttytd                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 78 Mar 29 22:39 /dev/ttyte                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 79 Mar 29 22:39 /dev/ttytf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 80 Mar 29 22:39 /dev/ttyu0                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 81 Mar 29 22:39 /dev/ttyu1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 82 Mar 29 22:39 /dev/ttyu2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 83 Mar 29 22:39 /dev/ttyu3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 84 Mar 29 22:39 /dev/ttyu4                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 85 Mar 29 22:39 /dev/ttyu5                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 86 Mar 29 22:39 /dev/ttyu6                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 87 Mar 29 22:39 /dev/ttyu7                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 88 Mar 29 22:39 /dev/ttyu8                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 89 Mar 29 22:39 /dev/ttyu9                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 90 Mar 29 22:39 /dev/ttyua                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 91 Mar 29 22:39 /dev/ttyub                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 92 Mar 29 22:39 /dev/ttyuc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 93 Mar 29 22:39 /dev/ttyud                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 94 Mar 29 22:39 /dev/ttyue                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 95 Mar 29 22:39 /dev/ttyuf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 96 Mar 29 22:39 /dev/ttyv0                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 97 Mar 29 22:39 /dev/ttyv1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 98 Mar 29 22:39 /dev/ttyv2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 99 Mar 29 22:39 /dev/ttyv3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 100 Mar 29 22:39 /dev/ttyv4                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 101 Mar 29 22:39 /dev/ttyv5                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 102 Mar 29 22:39 /dev/ttyv6                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 103 Mar 29 22:39 /dev/ttyv7                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 104 Mar 29 22:39 /dev/ttyv8                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 105 Mar 29 22:39 /dev/ttyv9                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 106 Mar 29 22:39 /dev/ttyva                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 107 Mar 29 22:39 /dev/ttyvb                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 108 Mar 29 22:39 /dev/ttyvc                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 109 Mar 29 22:39 /dev/ttyvd                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 110 Mar 29 22:39 /dev/ttyve                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 111 Mar 29 22:39 /dev/ttyvf                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 112 Mar 29 22:39 /dev/ttyw0                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 113 Mar 29 22:39 /dev/ttyw1                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 114 Mar 29 22:39 /dev/ttyw2                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 115 Mar 29 22:39 /dev/ttyw3                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 116 Mar 29 22:39 /dev/ttyw4                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 117 Mar 29 22:39 /dev/ttyw5                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 118 Mar 29 22:39 /dev/ttyw6                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 119 Mar 29 22:39 /dev/ttyw7                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 120 Mar 29 22:39 /dev/ttyw8                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 121 Mar 29 22:39 /dev/ttyw9                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 122 Mar 29 22:39 /dev/ttywa                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 123 Mar 29 22:39 /dev/ttywb                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 124 Mar 29 22:39 /dev/ttywc                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 125 Mar 29 22:39 /dev/ttywd                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 126 Mar 29 22:39 /dev/ttywe                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 127 Mar 29 22:39 /dev/ttywf                     |
+
+#+Name: After Connecting Devices
+#+begin_src shell :result drawer
+ls -lash /dev/tty* | tee /tmp/pluged.txt
+#+end_src
+
+#+RESULTS: After Connecting Devices
+| 0 crw-rw-rw- 1 root           wheel  2 | 0 Apr  2 17:34 /dev/tty                         |
+| 0 crw-rw-rw- 1 root           wheel  9 | 2 Mar 29 22:39 /dev/tty.Bluetooth-Incoming-Port |
+| 0 crw-rw-rw- 1 root           wheel  9 | 0 Mar 29 22:39 /dev/tty.wlan-debug              |
+| 0 crw-rw-rw- 1 root           wheel  4 | 0 Mar 29 22:39 /dev/ttyp0                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 1 Mar 29 22:39 /dev/ttyp1                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 2 Mar 29 22:39 /dev/ttyp2                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 3 Mar 29 22:39 /dev/ttyp3                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 4 Mar 29 22:39 /dev/ttyp4                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 5 Mar 29 22:39 /dev/ttyp5                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 6 Mar 29 22:39 /dev/ttyp6                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 7 Mar 29 22:39 /dev/ttyp7                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 8 Mar 29 22:39 /dev/ttyp8                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 9 Mar 29 22:39 /dev/ttyp9                       |
+| 0 crw-rw-rw- 1 root           wheel  4 | 10 Mar 29 22:39 /dev/ttypa                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 11 Mar 29 22:39 /dev/ttypb                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 12 Mar 29 22:39 /dev/ttypc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 13 Mar 29 22:39 /dev/ttypd                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 14 Mar 29 22:39 /dev/ttype                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 15 Mar 29 22:39 /dev/ttypf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 16 Mar 29 22:39 /dev/ttyq0                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 17 Mar 29 22:39 /dev/ttyq1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 18 Mar 29 22:39 /dev/ttyq2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 19 Mar 29 22:39 /dev/ttyq3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 20 Mar 29 22:39 /dev/ttyq4                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 21 Mar 29 22:39 /dev/ttyq5                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 22 Mar 29 22:39 /dev/ttyq6                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 23 Mar 29 22:39 /dev/ttyq7                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 24 Mar 29 22:39 /dev/ttyq8                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 25 Mar 29 22:39 /dev/ttyq9                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 26 Mar 29 22:39 /dev/ttyqa                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 27 Mar 29 22:39 /dev/ttyqb                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 28 Mar 29 22:39 /dev/ttyqc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 29 Mar 29 22:39 /dev/ttyqd                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 30 Mar 29 22:39 /dev/ttyqe                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 31 Mar 29 22:39 /dev/ttyqf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 32 Mar 29 22:39 /dev/ttyr0                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 33 Mar 29 22:39 /dev/ttyr1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 34 Mar 29 22:39 /dev/ttyr2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 35 Mar 29 22:39 /dev/ttyr3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 36 Mar 29 22:39 /dev/ttyr4                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 37 Mar 29 22:39 /dev/ttyr5                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 38 Mar 29 22:39 /dev/ttyr6                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 39 Mar 29 22:39 /dev/ttyr7                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 40 Mar 29 22:39 /dev/ttyr8                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 41 Mar 29 22:39 /dev/ttyr9                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 42 Mar 29 22:39 /dev/ttyra                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 43 Mar 29 22:39 /dev/ttyrb                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 44 Mar 29 22:39 /dev/ttyrc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 45 Mar 29 22:39 /dev/ttyrd                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 46 Mar 29 22:39 /dev/ttyre                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 47 Mar 29 22:39 /dev/ttyrf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 48 Mar 29 22:39 /dev/ttys0                      |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 0 Apr  2 17:44 /dev/ttys000                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 1 Apr  2 17:37 /dev/ttys001                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 2 Apr  2 18:49 /dev/ttys002                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 3 Mar 29 23:04 /dev/ttys003                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 4 Mar 29 23:30 /dev/ttys004                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 5 Apr  2 17:36 /dev/ttys005                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 6 Apr  2 17:40 /dev/ttys006                     |
+| 0 crw--w---- 1 adarshmelethil tty   16 | 7 Apr  2 18:23 /dev/ttys007                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 49 Mar 29 22:39 /dev/ttys1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 50 Mar 29 22:39 /dev/ttys2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 51 Mar 29 22:39 /dev/ttys3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 52 Mar 29 22:39 /dev/ttys4                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 53 Mar 29 22:39 /dev/ttys5                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 54 Mar 29 22:39 /dev/ttys6                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 55 Mar 29 22:39 /dev/ttys7                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 56 Mar 29 22:39 /dev/ttys8                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 57 Mar 29 22:39 /dev/ttys9                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 58 Mar 29 22:39 /dev/ttysa                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 59 Mar 29 22:39 /dev/ttysb                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 60 Mar 29 22:39 /dev/ttysc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 61 Mar 29 22:39 /dev/ttysd                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 62 Mar 29 22:39 /dev/ttyse                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 63 Mar 29 22:39 /dev/ttysf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 64 Mar 29 22:39 /dev/ttyt0                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 65 Mar 29 22:39 /dev/ttyt1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 66 Mar 29 22:39 /dev/ttyt2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 67 Mar 29 22:39 /dev/ttyt3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 68 Mar 29 22:39 /dev/ttyt4                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 69 Mar 29 22:39 /dev/ttyt5                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 70 Mar 29 22:39 /dev/ttyt6                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 71 Mar 29 22:39 /dev/ttyt7                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 72 Mar 29 22:39 /dev/ttyt8                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 73 Mar 29 22:39 /dev/ttyt9                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 74 Mar 29 22:39 /dev/ttyta                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 75 Mar 29 22:39 /dev/ttytb                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 76 Mar 29 22:39 /dev/ttytc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 77 Mar 29 22:39 /dev/ttytd                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 78 Mar 29 22:39 /dev/ttyte                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 79 Mar 29 22:39 /dev/ttytf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 80 Mar 29 22:39 /dev/ttyu0                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 81 Mar 29 22:39 /dev/ttyu1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 82 Mar 29 22:39 /dev/ttyu2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 83 Mar 29 22:39 /dev/ttyu3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 84 Mar 29 22:39 /dev/ttyu4                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 85 Mar 29 22:39 /dev/ttyu5                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 86 Mar 29 22:39 /dev/ttyu6                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 87 Mar 29 22:39 /dev/ttyu7                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 88 Mar 29 22:39 /dev/ttyu8                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 89 Mar 29 22:39 /dev/ttyu9                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 90 Mar 29 22:39 /dev/ttyua                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 91 Mar 29 22:39 /dev/ttyub                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 92 Mar 29 22:39 /dev/ttyuc                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 93 Mar 29 22:39 /dev/ttyud                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 94 Mar 29 22:39 /dev/ttyue                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 95 Mar 29 22:39 /dev/ttyuf                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 96 Mar 29 22:39 /dev/ttyv0                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 97 Mar 29 22:39 /dev/ttyv1                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 98 Mar 29 22:39 /dev/ttyv2                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 99 Mar 29 22:39 /dev/ttyv3                      |
+| 0 crw-rw-rw- 1 root           wheel  4 | 100 Mar 29 22:39 /dev/ttyv4                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 101 Mar 29 22:39 /dev/ttyv5                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 102 Mar 29 22:39 /dev/ttyv6                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 103 Mar 29 22:39 /dev/ttyv7                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 104 Mar 29 22:39 /dev/ttyv8                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 105 Mar 29 22:39 /dev/ttyv9                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 106 Mar 29 22:39 /dev/ttyva                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 107 Mar 29 22:39 /dev/ttyvb                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 108 Mar 29 22:39 /dev/ttyvc                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 109 Mar 29 22:39 /dev/ttyvd                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 110 Mar 29 22:39 /dev/ttyve                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 111 Mar 29 22:39 /dev/ttyvf                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 112 Mar 29 22:39 /dev/ttyw0                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 113 Mar 29 22:39 /dev/ttyw1                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 114 Mar 29 22:39 /dev/ttyw2                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 115 Mar 29 22:39 /dev/ttyw3                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 116 Mar 29 22:39 /dev/ttyw4                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 117 Mar 29 22:39 /dev/ttyw5                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 118 Mar 29 22:39 /dev/ttyw6                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 119 Mar 29 22:39 /dev/ttyw7                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 120 Mar 29 22:39 /dev/ttyw8                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 121 Mar 29 22:39 /dev/ttyw9                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 122 Mar 29 22:39 /dev/ttywa                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 123 Mar 29 22:39 /dev/ttywb                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 124 Mar 29 22:39 /dev/ttywc                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 125 Mar 29 22:39 /dev/ttywd                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 126 Mar 29 22:39 /dev/ttywe                     |
+| 0 crw-rw-rw- 1 root           wheel  4 | 127 Mar 29 22:39 /dev/ttywf                     |
+
+Then we take the difference of the file.
+
+#+begin_src shell :result drawer
+diff /tmp/pluged.txt /tmp/unpluged.txt
+#+end_src
+

@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       c445b388-0f7f-4b99-82b7-4743973aba07
+:END:
+#+title: Microcontroller
+#+SETUPFILE: tags.org
+
+[[wikipedia:Microcontroller][Microcontrollers]] are small computers.
+
+
+
+* ATmega328P :ATTACH:
+:PROPERTIES:
+:ID:       f385e9e7-b195-4a9d-9ec3-392cd74a63bc
+:END:
